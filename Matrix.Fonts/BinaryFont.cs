@@ -43,10 +43,14 @@ internal class GlyphData : IGlyph
     public GlyphData(int w, int h, byte[] p) { Width = w; Height = h; _pixels = p; }
 
     public bool GetPixel(int x, int y) 
-    {
-        int bitIndex = y * Width + x;
-        return (_pixels[bitIndex / 8] & (1 << (7 - (bitIndex % 8)))) != 0;
-    }
+{
+    int bytesPerRow = (int)Math.Ceiling(Width / 8.0);
+    
+    int byteIndex = (y * bytesPerRow) + (x / 8);
+    int bitOffset = 7 - (x % 8);
+    
+    return (_pixels[byteIndex] & (1 << bitOffset)) != 0;
+}
 
     public byte GetScanline(int y) => _pixels[y * (int)Math.Ceiling(Width / 8.0)];
 }
