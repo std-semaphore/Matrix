@@ -1,7 +1,8 @@
 <Project>
   <PropertyGroup>
     <Version>1.0.0</Version>
-    <Authors>beewuzzer</Authors>
+    <PackageId>StdSemaphore.$(MSBuildProjectName)</PackageId>
+    <Authors>std-semaphore Contributors</Authors>
     <Company>std-semaphore</Company>
     <RepositoryUrl>https://github.com/std-semaphore/Matrix</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
