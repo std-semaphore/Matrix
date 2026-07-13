@@ -4,7 +4,7 @@ public class BinaryFontWriter
 {
     public static void Save(string path, string name, int height, List<GlyphEditor> glyphs)
     {
-        using var stream = File.OpenWrite(path);
+        using var stream = File.Create(path);
         using var writer = new BinaryWriter(stream);
 
         writer.Write(name.ToCharArray()); 
@@ -13,7 +13,7 @@ public class BinaryFontWriter
 
         foreach (var g in glyphs)
         {
-            writer.Write(g.Character);
+            writer.Write((ushort)g.Character);
             writer.Write((byte)g.Width);
             
             byte[] paddedData = PackGlyphPixels(g.Grid, g.Width, height);

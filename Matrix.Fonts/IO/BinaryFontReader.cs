@@ -15,10 +15,12 @@ public static class BinaryFontReader
 
         for (int i = 0; i < count; i++)
         {
-            char character = reader.ReadChar();
+            char character = (char)reader.ReadUInt16();
             int width = reader.ReadByte();
             
-            int dataLength = (int)Math.Ceiling((width * height) / 8.0);
+            int bytesPerRow = (int)Math.Ceiling(width / 8.0);
+            int dataLength = bytesPerRow * height;
+            
             byte[] pixelData = reader.ReadBytes(dataLength);
 
             glyphs.Add(new GlyphEntry(character, width, pixelData));
@@ -27,5 +29,4 @@ public static class BinaryFontReader
         return (name, height, glyphs);
     }
 }
-
 public record GlyphEntry(char Character, int Width, byte[] PixelData);
