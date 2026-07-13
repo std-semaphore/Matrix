@@ -37,7 +37,6 @@ public partial class MainWindow : Window
 
     private GlyphVM? _selectedGlyph;
 
-    // PERFORMANCE OPTIMIZATION CACHES
     private readonly List<Ellipse> _canvasLedPool = new();
     private int _currentPoolCols;
     private int _currentPoolRows;
@@ -223,7 +222,7 @@ public partial class MainWindow : Window
                 _glyphs.Add(new GlyphVM { Character = oldGlyph.Character, Width = oldGlyph.Width, Grid = memoryGrid });
             }
 
-            BinaryFontWriter.Save(targetFile.Path.LocalPath, binaryFontName, oldFont.Height, editorsList);
+            BinaryFontWriter.Save(targetFile.Path.LocalPath, binaryFontName, oldFont.Height, oldFont.Spacing, editorsList);
 
             _currentFilePath = targetFile.Path.LocalPath;
             _selectedGlyph = _glyphs.Count > 0 ? _glyphs[0] : null;
@@ -312,14 +311,16 @@ public partial class MainWindow : Window
         if (files.Count == 0) return false;
         var path = files[0].Path.LocalPath;
 
-        var (name, height, glyphEntries) = BinaryFontReader.Load(path);
+        var (name, height, spacing, glyphEntries) = BinaryFontReader.Load(path);
 
         _glyphs.Clear();
         NameBox.Text = name.TrimEnd('\0');
         _fontHeight = height;
+        _spacing = spacing;
         
         _suppressEvents = true;
         HeightBox.Text = height.ToString();
+        SpacingBox.Text = spacing.ToString();
         _suppressEvents = false;
 
         foreach (var entry in glyphEntries)
@@ -367,7 +368,7 @@ public partial class MainWindow : Window
         string name = (NameBox.Text ?? "").PadRight(4).Substring(0, 4);
         var editors = _glyphs.Select(g => new GlyphEditor(g.Character, g.Width, SafeTruncateGrid(g.Grid, g.Width, _fontHeight))).ToList();
 
-        BinaryFontWriter.Save(path, name, _fontHeight, editors);
+        BinaryFontWriter.Save(path, name, _fontHeight, _spacing, editors);
 
         _currentFilePath = path;
         UpdateStatus();
@@ -684,7 +685,6 @@ public partial class MainWindow : Window
         const double ledStep = 6.0;
         int totalCanvasColumns = (int)(UnifiedPreviewCanvas.Width / ledStep);
 
-        // 1. Manage and resize our cached shapes pool instead of clearing children entirely
         int targetTotalLeds = totalCanvasColumns * _fontHeight;
         if (_canvasLedPool.Count != targetTotalLeds || _currentPoolCols != totalCanvasColumns || _currentPoolRows != _fontHeight)
         {

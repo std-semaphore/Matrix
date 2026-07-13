@@ -2,7 +2,7 @@ namespace Matrix.Fonts;
 
 public static class BinaryFontReader
 {
-    public static (string Name, int Height, List<GlyphEntry> Glyphs) Load(string path)
+    public static (string Name, int Height, int Spacing, List<GlyphEntry> Glyphs) Load(string path)
     {
         using var stream = File.OpenRead(path);
         using var reader = new BinaryReader(stream);
@@ -26,7 +26,13 @@ public static class BinaryFontReader
             glyphs.Add(new GlyphEntry(character, width, pixelData));
         }
 
-        return (name, height, glyphs);
+        int spacing = 1;
+        if (reader.BaseStream.Position < reader.BaseStream.Length)
+        {
+            spacing = reader.ReadInt16();
+        }
+
+        return (name, height, spacing, glyphs);
     }
 }
 public record GlyphEntry(char Character, int Width, byte[] PixelData);

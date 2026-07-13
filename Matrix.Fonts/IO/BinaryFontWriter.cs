@@ -2,7 +2,7 @@ namespace Matrix.Fonts;
 
 public class BinaryFontWriter
 {
-    public static void Save(string path, string name, int height, List<GlyphEditor> glyphs)
+    public static void Save(string path, string name, int height, int spacing, List<GlyphEditor> glyphs)
     {
         using var stream = File.Create(path);
         using var writer = new BinaryWriter(stream);
@@ -19,6 +19,8 @@ public class BinaryFontWriter
             byte[] paddedData = PackGlyphPixels(g.Grid, g.Width, height);
             writer.Write(paddedData); 
         }
+
+        writer.Write((short)spacing);
     }
 
     private static byte[] PackGlyphPixels(bool[,] grid, int width, int height)

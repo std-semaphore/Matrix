@@ -10,5 +10,7 @@ public interface IGlyph {
 public interface IFont {
     string Name { get; }
     int Height { get; }
+    int Spacing { get; }
     IGlyph GetGlyph(char c);
+    bool ContainsGlyph(char c);
 }

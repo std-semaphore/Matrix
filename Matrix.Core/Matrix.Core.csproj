@@ -4,11 +4,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Description>Embedded binary fonts (.mtxfont) and registry management for rendering character glyphs on the Matrix boards.</Description>
+    <Description>Rendering backend for deparutre boards</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\*.mtxfont" />
+    <ProjectReference Include="..\Matrix.Fonts\Matrix.Fonts.csproj" />
   </ItemGroup>
 
 </Project>

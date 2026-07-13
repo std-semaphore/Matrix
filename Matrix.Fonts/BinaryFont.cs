@@ -6,6 +6,7 @@ public class BinaryFont : IFont
 {
     public string Name { get; }
     public int Height { get; }
+    public int Spacing { get; }
     private readonly Dictionary<char, GlyphData> _glyphs = new();
 
     public BinaryFont(string resourceName)
@@ -30,6 +31,15 @@ public class BinaryFont : IFont
             byte[] pixels = reader.ReadBytes(dataLength);
 
             _glyphs[c] = new GlyphData(width, Height, pixels);
+        }
+
+        if (reader.BaseStream.Position < reader.BaseStream.Length)
+        {
+            Spacing = reader.ReadInt16();
+        }
+        else
+        {
+            Spacing = 1;
         }
     }
 

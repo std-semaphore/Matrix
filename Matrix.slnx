@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="Matrix.Boards/Matrix.Boards.csproj" />
+  <Project Path="Matrix.Core/Matrix.Core.csproj" />
+  <Project Path="Matrix.FontEditor/Matrix.FontEditor.csproj" />
   <Project Path="Matrix.Fonts/Matrix.Fonts.csproj" />
 </Solution>
