@@ -1,0 +1,134 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Matrix.FontEditor.MainWindow"
+        Title="Font Editor"
+        Width="1050" Height="710"
+        MinWidth="900" MinHeight="610"
+        Background="#1e1e2e" Foreground="#cdd6f4">
+    
+    <NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Header="File">
+                <NativeMenu>
+                    <NativeMenuItem Header="New font" />
+                    <NativeMenuItem Header="Open .mtxfont." />
+                    <NativeMenuItemSeparator />
+                    <NativeMenuItem Header="Save" />
+                    <NativeMenuItem Header="Save As" />
+                </NativeMenu>
+            </NativeMenuItem>
+            <NativeMenuItem Header="Tools">
+                <NativeMenu>
+                    <NativeMenuItem Header="Convert legacy font" />
+                </NativeMenu>
+            </NativeMenuItem>
+        </NativeMenu>
+    </NativeMenu.Menu>
+
+    <Window.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="#cdd6f4"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#181825"/>
+            <Setter Property="Foreground" Value="#cdd6f4"/>
+            <Setter Property="BorderBrush" Value="#45475a"/>
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Background" Value="#313244"/>
+            <Setter Property="Foreground" Value="#cdd6f4"/>
+        </Style>
+    </Window.Styles>
+
+    <DockPanel>
+        <NativeMenuBar DockPanel.Dock="Top"/>
+
+        <DockPanel Margin="12">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="8" Margin="0,0,0,10">
+                <TextBlock Text="Name:" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold"/>
+                <TextBox Name="NameBox" Width="60" MaxLength="4"/>
+              
+                <TextBlock Text="Height:" VerticalAlignment="Center" Margin="8,0,0,0" FontSize="12" FontWeight="SemiBold"/>
+                <TextBox Name="HeightBox" Width="35"/>
+                
+                <TextBlock Text="Spacing:" VerticalAlignment="Center" Margin="8,0,0,0" FontSize="12" FontWeight="SemiBold"/>
+                <TextBox Name="SpacingBox" Width="35"/>
+                
+                <Button Name="UndoButton" Content="Undo" Margin="16,0,0,0" Padding="10,4"/>
+                <Button Name="RedoButton" Content="Redo" Padding="10,4"/>
+                <Button Name="NewButton" Content="New font" Margin="16,0,0,0" Padding="10,4"/>
+           
+                <Button Name="OpenButton" Content="Open" Padding="10,4"/>
+                <Button Name="SaveButton" Content="Save" Padding="10,4"/>
+                <Button Name="SaveAsButton" Content="Save As" Padding="10,4"/>
+            </StackPanel>
+
+            <Grid DockPanel.Dock="Bottom" RowDefinitions="*, *" Margin="0,12,0,0" Height="240">
+                <Grid Grid.Row="0" RowDefinitions="Auto, *" Margin="0,0,0,6">
+                    <TextBlock Grid.Row="0" Text="Preview" FontSize="11" FontWeight="SemiBold" Foreground="#a6adc8" Margin="2,0,0,4"/>
+                    <Border Grid.Row="1" Background="#11111b" BorderBrush="#45475a" BorderThickness="1" CornerRadius="6" Padding="10">
+                        <Viewbox Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <Canvas Name="UnifiedPreviewCanvas" Width="1200" Height="70"/>
+                        </Viewbox>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="1" RowDefinitions="Auto, *">
+                    <TextBlock Grid.Row="0" Text="Character preview" FontSize="11" FontWeight="SemiBold" Foreground="#a6adc8" Margin="2,2,0,4"/>
+                    <Border Grid.Row="1" Background="#11111b" BorderBrush="#45475a" BorderThickness="1" CornerRadius="6" Padding="8">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                            <StackPanel Name="FullFontSheetPanel" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center"/>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </Grid>
+
+            <StackPanel DockPanel.Dock="Left" Width="180" Spacing="6" Margin="0,0,10,0">
+                <TextBlock Text="Glyphs" FontSize="12" FontWeight="SemiBold"/>
+                
+                <TextBox Name="SearchBox" Watermark="Search glyph" Height="28"/>
+                
+                <Border Background="#181825" BorderBrush="#45475a" BorderThickness="1" CornerRadius="4" Height="186">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <WrapPanel Name="GlyphsTileGrid" Margin="4" Orientation="Horizontal"/>
+                    </ScrollViewer>
+                </Border>
+                
+                <Grid ColumnDefinitions="*, *">
+                    <TextBox Grid.Column="0" Name="CharBox" MaxLength="1" Watermark="char" Margin="0,0,2,0"/>
+                    <TextBox Grid.Column="1" Name="WidthBox" Text="8" Watermark="width" Margin="2,0,0,0"/>
+                </Grid>
+                <Grid ColumnDefinitions="*, *">
+                    <Button Grid.Column="0" Name="AddButton" Content="Add Glyph" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0,0,2,0"/>
+                    <Button Grid.Column="1" Name="RemoveButton" Content="Remove" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="#f38ba8" Foreground="#11111b" Margin="2,0,0,0"/>
+                </Grid>
+                
+                <Separator Height="1" Background="#45475a" Margin="0,4"/>
+                
+                <TextBlock Text="Preview input" FontSize="12" FontWeight="SemiBold" Margin="0,4,0,0"/>
+                <TextBox Name="PreviewBox" Watermark="Enter a string" TextWrapping="NoWrap"/>
+            </StackPanel>
+
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="4" Margin="0,0,0,8">
+                    <TextBlock Text="Glyph width" VerticalAlignment="Center" FontSize="12"/>
+                    <TextBox Name="SelectedWidthBox" Width="40"/>
+                    <Button Name="InvertButton" Content="Invert" Margin="12,0,0,0"/>
+                    <Button Name="ShiftUpButton" Content="↑" Width="28"/>
+                    <Button Name="ShiftDownButton" Content="↓" Width="28"/>
+                    <Button Name="ShiftLeftButton" Content="←" Width="28"/>
+                    <Button Name="ShiftRightButton" Content="→" Width="28"/>
+                    <Button Name="ClearButton" Content="Clear" Margin="8,0,0,0" Background="#f38ba8" Foreground="#11111b"/>
+                </StackPanel>
+
+                <Border Background="#14141f" BorderBrush="#45475a" BorderThickness="1" CornerRadius="6" Padding="12">
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                        <Viewbox Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <UniformGrid Name="PixelPanel" Columns="1"/>
+                        </Viewbox>
+                    </ScrollViewer>
+                </Border>
+            </DockPanel>
+        </DockPanel>
+    </DockPanel>
+</Window>

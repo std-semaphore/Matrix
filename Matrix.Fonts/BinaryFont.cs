@@ -12,7 +12,7 @@ public class BinaryFont : IFont
     {
         var assembly = Assembly.GetExecutingAssembly();
         using var stream = assembly.GetManifestResourceStream(resourceName) 
-                           ?? throw new FileNotFoundException($"Font {resourceName} not found.");
+                           ?? throw new FileNotFoundException($"Font {resourceName} not found");
         using var reader = new BinaryReader(stream);
 
         Name = new string(reader.ReadChars(4)); 
