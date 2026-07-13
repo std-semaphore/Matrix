@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- adjust this path if Matrix.Fonts.csproj isn't a sibling folder of this project -->
     <ProjectReference Include="..\Matrix.Fonts\Matrix.Fonts.csproj" />
   </ItemGroup>
 
