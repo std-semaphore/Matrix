@@ -317,9 +317,17 @@ public static class PlatformBoardLayout
         if (!string.IsNullOrEmpty(train.LiveStatusOverride)) return train.LiveStatusOverride;
         if (train.LiveStatus == ServiceTrackingStatus.AtPlatform) return "Arrived";
         // Approaching is ignored so it falls through to estimated/on-time!
-        if (train.EstimatedTime.HasValue && train.EstimatedTime.Value != train.ScheduledTime)
+        if (train.EstimatedTime.HasValue)
         {
-            return $"Exp {train.EstimatedTime.Value:HH:mm}";
+            if (train.EstimatedTime.Value <= train.ScheduledTime)
+            {
+                return "On time";
+            }
+            var delay = train.EstimatedTime.Value - train.ScheduledTime;
+            if (delay.TotalSeconds >= 60.0)
+            {
+                return $"Exp {train.EstimatedTime.Value:HH:mm}";
+            }
         }
         return "On time";
     }
