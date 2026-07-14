@@ -117,6 +117,16 @@ public static class PlatformBoardLayout
         // --- LINE 2 ---
         // Construct scrollable labels list
         var labels = new List<string>();
+
+        if (train.IsCancelled && !string.IsNullOrEmpty(train.CancellationReason))
+        {
+            labels.Add($"This train has been cancelled due to {train.CancellationReason}.");
+        }
+        else if (!string.IsNullOrEmpty(train.DelayReason))
+        {
+            labels.Add($"This train is delayed due to {train.DelayReason}.");
+        }
+
         var dividingCp = train.CallingPoints.FirstOrDefault(cp => cp.DoesTrainDivideHere);
         if (dividingCp != null)
         {
