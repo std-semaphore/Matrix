@@ -141,14 +141,15 @@ public static class PlatformBoardLayout
             }
         }
 
-        // Pre-calculate scroll durations (60fps: 12 lockup, 120 hold = 2 seconds, scroll speed = 0.88px/tick = 22/25)
+        // Pre-calculate scroll durations (60fps: 12 lockup, 120 hold if scrolling / 300 hold if static, scroll speed = 0.88px/tick = 22/25)
         var labelDurations = new List<int>();
         int totalDuration = 0;
         for (int i = 0; i < labels.Count; i++)
         {
             int width = TextRenderer.MeasureStringWidth(standardFont, labels[i]);
+            int holdTicks = width > 200 ? 120 : 300; // 5 seconds hold for non-scrolling, 2 seconds for scrolling
             int scrollDuration = width > 200 ? (width * 25 + 21) / 22 : 0;
-            int duration = 12 + 120 + scrollDuration;
+            int duration = 12 + holdTicks + scrollDuration;
             labelDurations.Add(duration);
             totalDuration += duration;
         }
@@ -168,11 +169,14 @@ public static class PlatformBoardLayout
 
         int animY2 = 0;
         int scrollX = 0;
+        int activeWidth = TextRenderer.MeasureStringWidth(standardFont, labels[activeIdx]);
+        int activeHoldTicks = activeWidth > 200 ? 120 : 300;
+
         if (subTick < 12)
         {
             animY2 = 9 - (subTick * 3) / 4;
         }
-        else if (subTick < 12 + 120)
+        else if (subTick < 12 + activeHoldTicks)
         {
             animY2 = 0;
             scrollX = 0;
@@ -180,7 +184,7 @@ public static class PlatformBoardLayout
         else
         {
             animY2 = 0;
-            scrollX = -(((subTick - 132) * 22) / 25);
+            scrollX = -(((subTick - (12 + activeHoldTicks)) * 22) / 25);
         }
         TextRenderer.DrawString(line2, standardFont, labels[activeIdx], startX: scrollX, startY: animY2);
 
